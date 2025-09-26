@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 
 function Contactus() {
@@ -6,99 +5,103 @@ function Contactus() {
     name: '',
     email: '',
     contact: '',
+    bank: '',
+    loanType: '',
+    loanDuration: '',
     message: '',
-    loans: [], // Added loans array to hold selected loan types
+    loans: [],
   });
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Handle input changes (text, email, message, etc.)
+  // Handle input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
-  // Handle checkbox changes
-  const handleLoanChange = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setFormData((prev) => ({
-        ...prev,
-        loans: [...prev.loans, value],
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        loans: prev.loans.filter((loan) => loan !== value),
-      }));
-    }
-  };
-
-  // Validation function
+  // Validation
   const validate = () => {
     const tempErrors = {};
 
+    // Name validation
     if (!formData.name.trim()) {
       tempErrors.name = 'Full Name is required';
     }
 
+    // Contact validation
     if (!formData.contact.trim()) {
       tempErrors.contact = 'Contact number is required';
     } else if (!/^\d{10}$/.test(formData.contact)) {
       tempErrors.contact = 'Enter a valid 10-digit contact number';
     }
 
-    if (formData.loans.length === 0) {
-      tempErrors.loans = 'Please select at least one loan type';
+    // Email validation
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      tempErrors.email = 'Enter a valid email address';
+    }
+
+    // Bank validation
+    if (!formData.bank.trim()) {
+      tempErrors.bank = 'Please select a bank';
+    }
+
+    // Loan Type validation
+    if (!formData.loanType || formData.loanType.trim() === '') {
+      tempErrors.loanType = 'Please select a loan type';
+    }
+
+    // Loan Duration validation
+    if (!formData.loanDuration.trim()) {
+      tempErrors.loanDuration = 'Loan duration is required';
+    } else if (isNaN(formData.loanDuration) || Number(formData.loanDuration) <= 0) {
+      tempErrors.loanDuration = 'Enter a valid loan duration in years';
     }
 
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
 
-  // Handle form submit and send data to backend
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validate()) return;
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validate()) return;
 
-    setLoading(true);
-    setSuccessMessage('');
+  setLoading(true);
+  setSuccessMessage('');
 
-    try {
-      const response = await fetch('http://localhost:8080/api/contacts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/contacts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
 
-      if (!response.ok) {
-        throw new Error('Failed to submit form');
-      }
+    if (!response.ok) throw new Error('Failed to submit form');
 
-      const data = await response.json();
-      console.log('Form submitted successfully:', data);
-      setSuccessMessage('Your message has been sent successfully!');
+    const data = await response.json();
+    console.log('Form submitted successfully:', data);
+    setSuccessMessage('Your message has been sent successfully!');
 
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        contact: '',
-        message: '',
-        loans: [],
-      });
-      setErrors({});
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('Something went wrong! Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    setFormData({
+      name: '',
+      email: '',
+      contact: '',
+      bank: '',
+      loanType: '',
+      loanDuration: '',
+      message: '',
+    });
+    setErrors({});
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    alert('Something went wrong! Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="max-w-7xl mx-auto px-12 py-20">
@@ -117,7 +120,7 @@ function Contactus() {
         </div>
       )}
 
-      {/* Contact Information Section */}
+      {/* Contact Info Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
         {/* Address Card */}
         <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-blue-100 transform hover:-translate-y-2">
@@ -229,7 +232,6 @@ function Contactus() {
         <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-xl border border-blue-100">
           <h2 className="text-3xl font-bold mb-8 text-gray-800">Send Us a Message</h2>
           <form className="space-y-6" onSubmit={handleSubmit}>
-            
             {/* Full Name */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -240,27 +242,27 @@ function Contactus() {
                 id="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={`w-full px-5 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
+                className={`w-full px-5 py-3 border rounded-xl ${
                   errors.name ? 'border-red-500' : 'border-gray-300'
-                }`}
+                } focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 placeholder="Enter your name"
               />
               {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
 
-            {/* Contact */}
+            {/* Contact Number */}
             <div>
               <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-2">
-                Contact <span className="text-red-500">*</span>
+                Contact Number <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 id="contact"
                 value={formData.contact}
                 onChange={handleChange}
-                className={`w-full px-5 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
+                className={`w-full px-5 py-3 border rounded-xl ${
                   errors.contact ? 'border-red-500' : 'border-gray-300'
-                }`}
+                } focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 placeholder="Enter your contact number"
               />
               {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact}</p>}
@@ -276,17 +278,51 @@ function Contactus() {
                 id="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className={`w-full px-5 py-3 border rounded-xl ${
+                  errors.email ? 'border-red-500' : 'border-gray-300'
+                } focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 placeholder="Enter your email"
               />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
 
-            {/* Loan Type Checkboxes */}
+            {/* Bank */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label htmlFor="bank" className="block text-sm font-medium text-gray-700 mb-2">
+                Select Bank
+              </label>
+              <select
+                id="bank"
+                value={formData.bank}
+                onChange={handleChange}
+                className={`w-full px-5 py-3 border rounded-xl ${
+                  errors.bank ? 'border-red-500' : 'border-gray-300'
+                } focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+              >
+                <option value="">-- Choose a bank --</option>
+                <option value="HDFC Bank">HDFC Bank</option>
+                <option value="ICICI Bank">ICICI Bank</option>
+                <option value="State Bank of India">State Bank of India</option>
+                <option value="Axis Bank">Axis Bank</option>
+                <option value="Bank of Baroda">Bank of Baroda</option>
+              </select>
+              {errors.bank && <p className="text-red-500 text-sm mt-1">{errors.bank}</p>}
+            </div>
+
+            {/* Loan Type */}
+            <div>
+              <label htmlFor="loanType" className="block text-sm font-medium text-gray-700 mb-2">
                 Select Loan Type <span className="text-red-500">*</span>
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <select
+                id="loanType"
+                value={formData.loanType || ''}
+                onChange={handleChange}
+                className={`w-full px-5 py-3 border rounded-xl ${
+                  errors.loanType ? 'border-red-500' : 'border-gray-300'
+                } focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+              >
+                <option value="">-- Choose a loan type --</option>
                 {[
                   'Personal Loan',
                   'Business Loan',
@@ -297,32 +333,46 @@ function Contactus() {
                   'Agriculture Loan',
                   'Loan Against Property',
                 ].map((loan) => (
-                  <label key={loan} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      value={loan}
-                      checked={formData.loans.includes(loan)}
-                      onChange={handleLoanChange}
-                      className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-gray-700">{loan}</span>
-                  </label>
+                  <option key={loan} value={loan}>
+                    {loan}
+                  </option>
                 ))}
-              </div>
-              {errors.loans && <p className="text-red-500 text-sm mt-1">{errors.loans}</p>}
+              </select>
+              {errors.loanType && <p className="text-red-500 text-sm mt-1">{errors.loanType}</p>}
             </div>
 
-            {/* Message */}
+            {/* Loan Duration */}
+            <div>
+              <label htmlFor="loanDuration" className="block text-sm font-medium text-gray-700 mb-2">
+                Loan Duration (Years) <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                id="loanDuration"
+                value={formData.loanDuration}
+                onChange={handleChange}
+                min="1"
+                className={`w-full px-5 py-3 border rounded-xl ${
+                  errors.loanDuration ? 'border-red-500' : 'border-gray-300'
+                } focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                placeholder="e.g. 5"
+              />
+              {errors.loanDuration && (
+                <p className="text-red-500 text-sm mt-1">{errors.loanDuration}</p>
+              )}
+            </div>
+
+            {/* Additional Message */}
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                Your Message
+                Additional Message (Optional)
               </label>
               <textarea
                 id="message"
                 rows="5"
                 value={formData.message}
                 onChange={handleChange}
-                className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Type your message here..."
               />
             </div>

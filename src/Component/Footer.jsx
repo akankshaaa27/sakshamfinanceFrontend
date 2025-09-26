@@ -1,9 +1,22 @@
 import React from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
   const navigate = useNavigate();
+
+  // Open Google Maps for the address
+  const openGoogleMaps = () => {
+    const address = "Sr No. 19/1, Hingne Home Colony, Karve Nagar, Pune-411052";
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  // Navigate to a path and scroll to top
+  const goToPage = (path) => {
+    navigate(path);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <footer className="bg-gray-900 text-white pt-16 pb-8">
@@ -14,7 +27,7 @@ const Footer = () => {
           <div>
             <h3
               className="text-2xl font-bold mb-6 text-yellow-400 cursor-pointer"
-              onClick={() => navigate('/')}
+              onClick={() => goToPage('/')}
             >
               Saksham Finance
             </h3>
@@ -22,18 +35,10 @@ const Footer = () => {
               Empowering your financial journey with trusted loan solutions and personalized services.
             </p>
             <div className="flex space-x-4 mt-6">
-              <a href="#" className="text-gray-300 hover:text-yellow-400 transition-colors">
-                <FaFacebook size={20} />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-yellow-400 transition-colors">
-                <FaTwitter size={20} />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-yellow-400 transition-colors">
-                <FaInstagram size={20} />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-yellow-400 transition-colors">
-                <FaLinkedin size={20} />
-              </a>
+              <a href="#" className="text-gray-300 hover:text-yellow-400 transition-colors"><FaFacebook size={20} /></a>
+              <a href="#" className="text-gray-300 hover:text-yellow-400 transition-colors"><FaTwitter size={20} /></a>
+              <a href="#" className="text-gray-300 hover:text-yellow-400 transition-colors"><FaInstagram size={20} /></a>
+              <a href="#" className="text-gray-300 hover:text-yellow-400 transition-colors"><FaLinkedin size={20} /></a>
             </div>
           </div>
 
@@ -41,10 +46,18 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-6 text-white">Quick Links</h4>
             <ul className="space-y-3">
-              <li><Link to="/" className="text-gray-300 hover:text-yellow-400 transition-colors">Home</Link></li>
-              <li><Link to="/about" className="text-gray-300 hover:text-yellow-400 transition-colors">About Us</Link></li>
-              <li><Link to="/faq" className="text-gray-300 hover:text-yellow-400 transition-colors">FAQ</Link></li>
-              <li><Link to="/contact" className="text-gray-300 hover:text-yellow-400 transition-colors">Contact Us</Link></li>
+              <li>
+                <button onClick={() => goToPage('/')} className="text-gray-300 hover:text-yellow-400 transition-colors">Home</button>
+              </li>
+              <li>
+                <button onClick={() => goToPage('/about')} className="text-gray-300 hover:text-yellow-400 transition-colors">About Us</button>
+              </li>
+              <li>
+                <button onClick={() => goToPage('/faq')} className="text-gray-300 hover:text-yellow-400 transition-colors">FAQ</button>
+              </li>
+              <li>
+                <button onClick={() => goToPage('/contact')} className="text-gray-300 hover:text-yellow-400 transition-colors">Contact Us</button>
+              </li>
             </ul>
           </div>
 
@@ -52,13 +65,24 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-6 text-white">Loan Products</h4>
             <ul className="space-y-3">
-              <li><Link to="/Personalloan" className="text-gray-300 hover:text-yellow-400 transition-colors">Personal Loan</Link></li>
-              <li><Link to="/businessloan" className="text-gray-300 hover:text-yellow-400 transition-colors">Business Loan</Link></li>
-              <li><Link to="/homeloan" className="text-gray-300 hover:text-yellow-400 transition-colors">Home Loan</Link></li>
-              <li><Link to="/vehicalloan" className="text-gray-300 hover:text-yellow-400 transition-colors">Car Loan</Link></li>
-              <li><Link to="/educationloan" className="text-gray-300 hover:text-yellow-400 transition-colors">Education Loan</Link></li>
-               <li><Link to="/furnitureloanpage" className="text-gray-300 hover:text-yellow-400 transition-colors">Furniture Loan</Link></li>
-              
+              <li>
+                <button onClick={() => goToPage('/Personalloan')} className="text-gray-300 hover:text-yellow-400 transition-colors">Personal Loan</button>
+              </li>
+              <li>
+                <button onClick={() => goToPage('/businessloan')} className="text-gray-300 hover:text-yellow-400 transition-colors">Business Loan</button>
+              </li>
+              <li>
+                <button onClick={() => goToPage('/homeloan')} className="text-gray-300 hover:text-yellow-400 transition-colors">Home Loan</button>
+              </li>
+              <li>
+                <button onClick={() => goToPage('/vehicalloan')} className="text-gray-300 hover:text-yellow-400 transition-colors">Car Loan</button>
+              </li>
+              <li>
+                <button onClick={() => goToPage('/educationloan')} className="text-gray-300 hover:text-yellow-400 transition-colors">Education Loan</button>
+              </li>
+              <li>
+                <button onClick={() => goToPage('/furnitureloanpage')} className="text-gray-300 hover:text-yellow-400 transition-colors">Furniture Loan</button>
+              </li>
             </ul>
           </div>
 
@@ -68,22 +92,29 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <FaMapMarkerAlt className="mt-1 mr-3 text-yellow-400" />
-                <span className="text-gray-300">Sr No. 19/1, Hingne Home Colony, Karve Nagar, Pune-411052</span>
+                <span 
+                  onClick={openGoogleMaps}
+                  className="text-gray-300 hover:text-yellow-400 transition-colors cursor-pointer"
+                  title="Click to open in Google Maps"
+                >
+                  Sr No. 19/1, Hingne Home Colony, Karve Nagar, Pune-411052
+                </span>
               </li>
               <li className="flex items-center">
                 <FaPhone className="mr-3 text-yellow-400" />
-                <a href="tel:+9118001234567" className="text-gray-300 hover:text-yellow-400 transition-colors">
-                 7276240084
+                <a href="tel:7276240084" className="text-gray-300 hover:text-yellow-400 transition-colors">
+                  7276240084
                 </a>
               </li>
               <li className="flex items-center">
                 <FaEnvelope className="mr-3 text-yellow-400" />
-                <a href="mailto:info@sakshamfinance.com" className="text-gray-300 hover:text-yellow-400 transition-colors">
-                 sakshamfinance@gmail.com
+                <a href="mailto:sakshamfinance@gmail.com" className="text-gray-300 hover:text-yellow-400 transition-colors">
+                  sakshamfinance@gmail.com
                 </a>
               </li>
             </ul>
           </div>
+
         </div>
 
         {/* Bottom Bar */}
@@ -93,9 +124,15 @@ const Footer = () => {
               &copy; {new Date().getFullYear()} Saksham Finance. All Rights Reserved.
             </p>
             <div className="flex space-x-6">
-              <Link to="/privacy-policy" className="text-gray-400 hover:text-yellow-400 text-sm transition-colors">Privacy Policy</Link>
-              <Link to="/terms_conditions" className="text-gray-400 hover:text-yellow-400 text-sm transition-colors">Terms & Conditions</Link>
-              <Link to="/disclaimer" className="text-gray-400 hover:text-yellow-400 text-sm transition-colors">Disclaimer</Link>
+              <button onClick={() => goToPage('/privacy-policy')} className="text-gray-400 hover:text-yellow-400 text-sm transition-colors">
+                Privacy Policy
+              </button>
+              <button onClick={() => goToPage('/terms_conditions')} className="text-gray-400 hover:text-yellow-400 text-sm transition-colors">
+                Terms & Conditions
+              </button>
+              <button onClick={() => goToPage('/disclaimer')} className="text-gray-400 hover:text-yellow-400 text-sm transition-colors">
+                Disclaimer
+              </button>
             </div>
           </div>
         </div>

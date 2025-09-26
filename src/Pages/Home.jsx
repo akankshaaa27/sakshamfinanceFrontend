@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom'; // ✅ Added import for Link
 import backgroundImage from '../assets/Final.png';
 
-// Import bank logos
+// Bank logos
 import hdfcLogo from '../assets/hdfc.jpg';
 import bomLogo from '../assets/bom.jpg';
 import boiLogo from '../assets/boi.jpg';
@@ -13,7 +14,6 @@ import pnbLogo from '../assets/pnb.jpg';
 import canaraLogo from '../assets/canara.jpg';
 
 function Home() {
-  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -30,7 +30,6 @@ function Home() {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert('Form submitted! We will contact you shortly.');
-    setShowForm(false);
     setFormData({
       name: '',
       email: '',
@@ -57,14 +56,22 @@ function Home() {
     visible: {
       y: 0,
       opacity: 1,
+      transition: { type: 'spring', stiffness: 100 },
+    },
+  };
+
+  const iconVariants = {
+    animate: {
+      y: [0, -8, 0],
       transition: {
-        type: 'spring',
-        stiffness: 100,
+        duration: 2,
+        repeat: Infinity,
+        ease: 'easeInOut',
       },
     },
   };
 
-  // Bank data for the scroller
+  // Bank data for scrolling
   const banks = [
     { name: 'HDFC Bank', logo: hdfcLogo, id: 1 },
     { name: 'Bank of Maharashtra', logo: bomLogo, id: 2 },
@@ -80,17 +87,33 @@ function Home() {
     <div className="w-full min-h-screen">
       {/* Hero Section */}
       <div
-        className="w-full h-screen bg-cover bg-center flex justify-end items-center"
+        className="w-full h-screen bg-cover bg-center flex justify-end items-center relative"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
-        <div className="max-w-md mx-8 md:mx-16 lg:mr-32 px-4 py-8 text-left">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="relative max-w-md mx-8 md:mx-16 lg:mr-32 px-4 py-8 text-left z-10">
+          <motion.h2
+            className="text-3xl md:text-5xl font-extrabold text-white mb-4"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
             Mann hai toh money hai
-          </h2>
-          <p className="text-lg text-gray-200 mb-8">
-            Manage finances with our full suite of personalized financial products
-          </p>
-          <div className="flex flex-wrap items-center justify-start gap-4 md:gap-8">
+          </motion.h2>
+          <motion.p
+            className="text-lg text-gray-200 mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.3 }}
+          >
+            Manage finances with our full suite of personalized financial products.
+          </motion.p>
+          <motion.div
+            className="flex flex-wrap items-center justify-start gap-4 md:gap-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+          >
             <div className="text-xl font-semibold text-white">65 Million+ users</div>
             <div className="hidden md:block h-6 border-r border-gray-300"></div>
             <div className="text-xl font-semibold text-white">
@@ -98,7 +121,7 @@ function Home() {
             </div>
             <div className="hidden md:block h-6 border-r border-gray-300"></div>
             <div className="text-xl font-semibold text-white">5 Cr+ downloads</div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
@@ -113,12 +136,7 @@ function Home() {
               className="flex whitespace-nowrap"
               animate={{ x: [0, -1032] }}
               transition={{
-                x: {
-                  repeat: Infinity,
-                  repeatType: 'loop',
-                  duration: 20,
-                  ease: 'linear',
-                },
+                x: { repeat: Infinity, repeatType: 'loop', duration: 20, ease: 'linear' },
               }}
             >
               {banks.concat(banks).map((bank, index) => (
@@ -126,11 +144,7 @@ function Home() {
                   key={`${bank.id}-${index}`}
                   className="inline-flex items-center justify-center mx-8 w-40 h-20 bg-white rounded-lg shadow-md p-2"
                 >
-                  <img
-                    src={bank.logo}
-                    alt={bank.name}
-                    className="h-12 object-contain"
-                  />
+                  <img src={bank.logo} alt={bank.name} className="h-12 object-contain" />
                 </div>
               ))}
             </motion.div>
@@ -139,10 +153,24 @@ function Home() {
       </div>
 
       {/* Features Section */}
-      <div className="py-20 px-8 bg-gradient-to-b from-white to-gray-50">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative py-24 px-6 bg-gradient-to-b from-white via-blue-50/30 to-gray-100">
+        {/* Decorative animated background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute bottom-20 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+            animate={{ scale: [1, 1.3, 1] }}
+            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.h2
-            className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800"
+            className="text-4xl md:text-5xl font-extrabold text-center mb-20 text-gray-800 tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -152,7 +180,7 @@ function Home() {
           </motion.h2>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-3 gap-10"
             initial="hidden"
             whileInView="visible"
             variants={containerVariants}
@@ -163,38 +191,56 @@ function Home() {
                 title: 'Lightning Fast Approval',
                 desc: 'Get loan approval within 15 minutes with our AI-powered system.',
                 icon: '⚡',
-                color: 'bg-blue-50 text-blue-600',
-                border: 'border-blue-200',
+                gradient: 'from-blue-100 via-blue-50 to-white',
+                glow: 'shadow-blue-200',
               },
               {
                 title: 'Lowest Interest Rates',
                 desc: 'Starting from just 9.99% APR - lowest in the industry.',
                 icon: '💰',
-                color: 'bg-green-50 text-green-600',
-                border: 'border-green-200',
+                gradient: 'from-green-100 via-green-50 to-white',
+                glow: 'shadow-green-200',
               },
               {
                 title: '100% Digital Process',
-                desc: 'Complete your application without any paperwork.',
+                desc: 'Complete your application seamlessly without any paperwork.',
                 icon: '📱',
-                color: 'bg-purple-50 text-purple-600',
-                border: 'border-purple-200',
+                gradient: 'from-purple-100 via-purple-50 to-white',
+                glow: 'shadow-purple-200',
               },
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className={`bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-t-4 ${item.border}`}
                 variants={itemVariants}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: '0px 8px 30px rgba(0,0,0,0.15)',
+                }}
+                className={`relative group bg-gradient-to-br ${item.gradient} rounded-3xl p-8 transition-all duration-300 cursor-pointer`}
               >
+                {/* Glow effect */}
                 <div
-                  className={`w-16 h-16 ${item.color} rounded-full flex items-center justify-center text-3xl mb-6 mx-auto`}
+                  className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition duration-500 ${item.glow}`}
+                ></div>
+
+                {/* Icon */}
+                <motion.div
+                  variants={iconVariants}
+                  animate="animate"
+                  className="w-20 h-20 mx-auto rounded-full bg-white flex items-center justify-center text-4xl shadow-lg mb-6 relative z-10"
                 >
                   {item.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-4 text-center text-gray-800">
+                </motion.div>
+
+                {/* Title */}
+                <h3 className="text-xl md:text-2xl font-bold text-gray-800 text-center mb-4 relative z-10">
                   {item.title}
                 </h3>
-                <p className="text-gray-600 text-center">{item.desc}</p>
+
+                {/* Description */}
+                <p className="text-gray-600 text-center relative z-10 leading-relaxed">
+                  {item.desc}
+                </p>
               </motion.div>
             ))}
           </motion.div>
@@ -247,7 +293,7 @@ function Home() {
       </div>
 
       {/* CTA Section */}
-      <div className="py-20 px-8   bg-gradient-to-br from-[#A5DD9B] to-[#C5EBAA]  text-white">
+      <div className="py-20 px-8 bg-gradient-to-br from-[#A5DD9B] to-[#C5EBAA] text-white">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
             className="text-3xl md:text-4xl font-bold mb-6"
@@ -261,7 +307,7 @@ function Home() {
           <motion.p
             className="text-xl mb-8 opacity-90"
             initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}  
+            whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
@@ -273,124 +319,15 @@ function Home() {
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: true }}
           >
-            <button
-              onClick={() => setShowForm(true)}
-              className="bg-white text-blue-600 hover:bg-gray-100 font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+            <Link
+              to="/form"
+              className="bg-white text-blue-600 hover:bg-gray-100 font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-block text-center"
             >
               Apply Now
-            </button>
+            </Link>
           </motion.div>
         </div>
       </div>
-
-      {/* Loan Application Form Modal */}
-      {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-lg shadow-xl max-w-md w-full p-6"
-          >
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-800">Loan Application</h3>
-              <button
-                onClick={() => setShowForm(false)}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
-              >
-                &times;
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-gray-700 mb-2" htmlFor="name">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 mb-2" htmlFor="email">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 mb-2" htmlFor="phone">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 mb-2" htmlFor="loanAmount">
-                  Loan Amount (₹)
-                </label>
-                <input
-                  type="number"
-                  id="loanAmount"
-                  name="loanAmount"
-                  value={formData.loanAmount}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 mb-2" htmlFor="purpose">
-                  Loan Purpose
-                </label>
-                <select
-                  id="purpose"
-                  name="purpose"
-                  value={formData.purpose}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="Personal Loan">Personal Loan</option>
-                  <option value="Home Loan">Home Loan</option>
-                  <option value="Business Loan">Business Loan</option>
-                  <option value="Education Loan">Education Loan</option>
-                  <option value="Car Loan">Car Loan</option>
-                </select>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors font-semibold"
-              >
-                Submit Application
-              </button>
-            </form>
-          </motion.div>
-        </div>
-      )}
     </div>
   );
 }

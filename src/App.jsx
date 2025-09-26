@@ -28,6 +28,10 @@ import Disclaimer from './Pages/DisclaimerPage '
 import RealEstate from './Pages/RealEstate'
 import FurnitureLoanPage from './Pages/Loans/FurnitureLoanPage'
 import FurnitureLoanCalculator from './Calculators/FurnitureLoanCalculator'
+import Admin from './Pages/Admin'
+import RealEstateAdmin from './Pages/RealEstateAdmin'
+import AddProperty from './Pages/AddProperty'
+import PropertyForm from './Pages/PropertyForm'
 
 function App() {
   return (
@@ -43,6 +47,10 @@ function App() {
         <Route path="/terms_conditions" element={<TermsAndConditions />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
         <Route path="/realestate" element={<RealEstate/>} />
+        <Route path="/admin" element={<Admin/>} />
+        <Route path="/realestateadmin" element={<RealEstateAdmin/>} />
+        <Route path="/add-property" element={<AddProperty/>} />
+        <Route path="/propertyform" element={<PropertyForm/>} />
 
 
 

@@ -3,10 +3,12 @@ import { motion } from 'framer-motion';
 import { FaHandHoldingUsd, FaChartLine, FaUsers, FaShieldAlt, FaLightbulb, FaHandshake, FaAward, FaRocket } from 'react-icons/fa';
 import { GiCash } from 'react-icons/gi';
 import { RiCustomerService2Fill } from 'react-icons/ri';
-import lokeshImg from "../assets/lokeshSir.jpg";
+import lokeshImg from "../assets/LokeshSir.jpg";
+
 
 const AboutUs = () => {
   const [loaded, setLoaded] = useState(false);
+  
 
   useEffect(() => {
     setLoaded(true);
